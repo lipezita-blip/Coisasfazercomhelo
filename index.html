@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coisas que ainda quero fazer com a Helo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Caveat:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #111409;
+    --bg-card: #F4EDD8;
+    --bg-card-edge: #E5D9BC;
+    --ink: #211B0E;
+    --ink-light: #4A3F2A;
+    --terra: #B8501A;
+    --gold: #C9952E;
+    --gold-light: #E4B84A;
+    --stamp: #9B2D22;
+    --sage: #6B7A5C;
+    --sage-dim: #4D5842;
+    --cream: #F4EDD8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #1E2518 0%, var(--bg-deep) 100%);
+    font-family: 'Inter', sans-serif;
+    color: var(--cream);
+    padding-bottom: 4rem;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    border: 1px solid var(--bg-card-edge);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.22), 0 1px 3px rgba(0,0,0,0.15);
+    transition: box-shadow 0.18s ease;
+    padding: 1rem 0.9rem 1rem 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+  .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.28); }
+
+  .stamp-btn {
+    transition: transform 0.18s ease;
+    border: none;
+    background: none;
+    padding: 0;
+    flex-shrink: 0;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px dashed rgba(184,80,26,0.33);
+  }
+  .stamp-btn.checked {
+    border: 2px solid var(--stamp);
+    background: rgba(155,45,34,0.055);
+  }
+  .stamp-btn:hover { transform: scale(1.06); }
+  .stamp-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 50%; }
+
+  @keyframes stampDrop {
+    0% { transform: scale(2.2) rotate(0deg); opacity: 0; }
+    55% { transform: scale(0.88) rotate(var(--rot)); opacity: 1; }
+    100% { transform: scale(1) rotate(var(--rot)); opacity: 1; }
+  }
+  .stamp-mark { animation: stampDrop 0.38s cubic-bezier(0.22,1,0.36,1); }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid rgba(244,237,216,0.1);
+  }
+
+  .header {
+    padding: 2.8rem 1.5rem 2rem;
+    text-align: center;
+    max-width: 36rem;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    font-family: 'Caveat', cursive;
+    font-size: 1.1rem;
+    color: var(--gold);
+    letter-spacing: 0.06em;
+    margin-bottom: 0.8rem;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 6vw, 2.8rem);
+    line-height: 1.12;
+    color: var(--cream);
+    margin-bottom: 0.9rem;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .subtitle {
+    color: var(--sage);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    max-width: 24rem;
+    margin: 0 auto;
+  }
+
+  .progress-wrap {
+    max-width: 20rem;
+    margin: 1.8rem auto 0;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    color: var(--sage-dim);
+    margin-bottom: 0.4rem;
+  }
+  .progress-track {
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(244,237,216,0.1);
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--terra));
+    transition: width 0.5s ease;
+    border-radius: 999px;
+  }
+
+  main {
+    max-width: 36rem;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+
+  section {
+    margin-bottom: 2.4rem;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--cream);
+    letter-spacing: 0.01em;
+  }
+
+  .icon {
+    flex-shrink: 0;
+  }
+
+  .places {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .place-text { flex: 1; min-width: 0; }
+
+  .tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin-bottom: 0.35rem;
+  }
+
+  .place-name {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.02rem;
+    color: var(--ink);
+    margin-bottom: 0.2rem;
+    line-height: 1.2;
+  }
+
+  .place-area {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.3rem;
+    font-size: 0.7rem;
+    color: var(--terra);
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+  }
+  .place-area svg { margin-top: 1px; flex-shrink: 0; }
+
+  .place-desc {
+    margin: 0 0 0.45rem 0;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--ink-light);
+  }
+
+  .place-task {
+    font-family: 'Caveat', cursive;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--terra);
+    line-height: 1.3;
+  }
+
+  .stamp-label {
+    font-family: 'Caveat', cursive;
+    font-size: 0.82rem;
+    color: var(--terra);
+    font-weight: 600;
+  }
+
+  .stamp-mark span:first-child {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 1;
+    display: block;
+  }
+  .stamp-mark span:last-child {
+    font-family: 'Caveat', cursive;
+    font-weight: 600;
+    font-size: 0.82rem;
+    line-height: 1.15;
+    display: block;
+  }
+  .stamp-mark {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--stamp);
+  }
+
+  footer {
+    text-align: center;
+    padding: 0 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .all-done {
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    color: var(--gold-light);
+    margin-bottom: 0.5rem;
+  }
+
+  .credit {
+    color: var(--sage-dim);
+    font-size: 0.72rem;
+    margin-top: 1rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stamp-mark { animation: none; }
+    .stamp-btn:hover { transform: none; }
+    .card { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">roteiro de bolso · Porto Alegre</div>
+  <h1>Coisas que ainda<br /><em>quero fazer</em> com a Helo</h1>
+  <p class="subtitle">Cafés, tardes, cinema e jantares pela cidade. Carimba quando rolar — fica registrado pra nós dois.</p>
+
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span id="progress-text">nenhum carimbado ainda</span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="#B8501A" stroke="#B8501A"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.5 4.04 3 5.5l7 7Z"/></svg>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+    </div>
+  </div>
+</div>
+
+<main id="sections"></main>
+
+<footer>
+  <p class="all-done" id="all-done" style="display:none;">todos os carimbos! ♥</p>
+  <p class="credit">feito com carinho · Porto Alegre, RS</p>
+</footer>
+
+<script>
+const ICONS = {
+  coffee: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/></svg>',
+  sun: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>',
+  film: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>',
+  wine: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"/><path d="M7 10h10"/><path d="M12 15v7"/><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z"/></svg>',
+  mapPin: '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
+};
+
+const PLACES = [
+  // CAFÉ
+  {
+    id: 'oh-bruder-bezerra',
+    name: 'Oh Brüder',
+    area: 'Passo da Areia — Rua Bezerra de Menezes',
+    desc: 'O pão de queijo é o motivo real da visita, o café é só desculpa.',
+    task: 'Pedir o pão de queijo e parar de fingir que vim por outra coisa',
+    category: 'cafe',
+    tag: 'brunch',
+  },
+  {
+    id: 'william-sons',
+    name: 'William & Sons',
+    area: 'Pedro Ivo, quase esquina Silva Jardim',
+    desc: 'Escondido de propósito. Torram o próprio café ali atrás. Cardápio pequeno porque não precisa de mais.',
+    task: 'Pedir o café da casa e perguntar qual é o grão do dia',
+    category: 'cafe',
+    tag: 'micro-torrefação',
+  },
+  {
+    id: 'porto-farro',
+    name: 'Café Porto Farró',
+    area: 'Farroupilha',
+    desc: 'Café da manhã devagar, sem hora pra acabar.',
+    task: 'Ir num dia sem compromisso depois e ficar até enjoar do lugar',
+    category: 'cafe',
+    tag: 'manhã',
+  },
+  {
+    id: 'relicario',
+    name: 'Relicário Café',
+    area: 'Cidade Baixa — Av. João Pessoa',
+    desc: 'Toca a campainha pra entrar. Antiquário e café juntos — parece invasão na casa da vó de alguém.',
+    task: 'Tocar a campainha sem rir',
+    category: 'cafe',
+    tag: 'escondido',
+  },
+  {
+    id: 'leiteria',
+    name: 'Leiteria 639',
+    area: 'Santana — Av. Venâncio Aires',
+    desc: 'Fila no fim de semana, mas a varanda no sol compensa a espera.',
+    task: 'Encarar a fila e garantir mesa na varanda',
+    category: 'cafe',
+    tag: 'brunch',
+  },
+
+  // TARDE
+  {
+    id: 'gasometro-lago',
+    name: 'Orla do Guaíba',
+    area: 'Usina do Gasômetro',
+    desc: 'Vinho, mureta, e o céu ficando laranja de um jeito que parece exagero.',
+    task: 'Levar um vinho e sentar na mureta até o céu mudar de cor',
+    category: 'tarde',
+    tag: 'pôr do sol',
+  },
+  {
+    id: 'moinhos-parque',
+    name: 'Parque Moinhos de Vento',
+    area: 'Moinhos de Vento',
+    desc: 'Andar sem destino e parar onde der vontade.',
+    task: 'Caminhar sem rota e ver onde a gente para',
+    category: 'tarde',
+    tag: 'passeio',
+  },
+  {
+    id: 'farroupilha-chope',
+    name: 'Refúgio do Lago',
+    area: 'Parque Farroupilha',
+    desc: 'Chope olhando pro lago, num domingo que sempre acaba rápido demais.',
+    task: 'Tomar um chope vendo o domingo acabar rápido demais',
+    category: 'tarde',
+    tag: 'ao ar livre',
+  },
+
+  // CINEMA
+  {
+    id: 'cinemateca-capitolio',
+    name: 'Cinemateca Capitólio',
+    area: 'Centro — Rua Demétrio Ribeiro',
+    desc: 'Filme que não passa em nenhum outro lugar da cidade.',
+    task: 'Ver algo que não vai estar em nenhum streaming depois',
+    category: 'cinema',
+    tag: 'cinema arte',
+  },
+
+  // JANTAR
+  {
+    id: 'bottega-maria',
+    name: 'Bottega Maria',
+    area: 'Rio Branco',
+    desc: 'Massa fresca, luz baixa, poucas mesas. Jantar que não combina com pressa.',
+    task: 'Pedir uma massa fresca e não olhar pro relógio',
+    category: 'jantar',
+    tag: 'italiano',
+  },
+  {
+    id: 'capincho',
+    name: 'Capincho',
+    area: 'Moinhos de Vento',
+    desc: 'Menu surpresa. Quem decide é a cozinha, não você.',
+    task: 'Aceitar o que vier sem perguntar o nome do prato',
+    category: 'jantar',
+    tag: 'menu degustação',
+  },
+  {
+    id: 'raven',
+    name: 'The Raven',
+    area: 'Cidade Baixa',
+    desc: 'Decoração meio esquisita, tartare bom, tiramisù de martini. Não é pra qualquer humor.',
+    task: 'Pedir o tartare e o tiramisù de martini no mesmo dia',
+    category: 'jantar',
+    tag: 'bistrô',
+  },
+  {
+    id: 'fondue-outback',
+    name: 'Outback',
+    area: 'qualquer unidade',
+    desc: 'Fondue de chocolate no final, sem cerimônia nenhuma.',
+    task: 'Pedir o fondue e não levar o jantar tão a sério',
+    category: 'jantar',
+    tag: 'sem pretensão',
+  },
+];
+
+const SECTIONS = [
+  { key: 'cafe', label: 'Cafés pra demorar', icon: 'coffee' },
+  { key: 'tarde', label: 'Tardes & pôr do sol', icon: 'sun' },
+  { key: 'cinema', label: 'Cinema de verdade', icon: 'film' },
+  { key: 'jantar', label: 'Jantares especiais', icon: 'wine' },
+];
+
+const ROTATIONS = [-9, 5, -5, 7, -7, 4, -11, 6, -4, 9, -6, 3, -8, 8];
+
+const TAG_COLORS = {
+  'brunch': '#C9952E',
+  'café especial': '#6B7A5C',
+  'micro-torrefação': '#9B2D22',
+  'manhã': '#C9952E',
+  'escondido': '#4D5842',
+  'pôr do sol': '#B8501A',
+  'passeio': '#6B7A5C',
+  'ao ar livre': '#4D5842',
+  'cinema arte': '#9B2D22',
+  'italiano': '#B8501A',
+  'menu degustação': '#9B2D22',
+  'bistrô': '#6B7A5C',
+  'sem pretensão': '#C9952E',
+};
+
+const STORAGE_KEY = 'checkins-helo-v3';
+
+function formatDate(iso) {
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+  } catch {
+    return '';
+  }
+}
+
+function loadCheckins() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveCheckins(checkins) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(checkins));
+  } catch {}
+}
+
+let checkins = loadCheckins();
+
+function render() {
+  const sectionsEl = document.getElementById('sections');
+  sectionsEl.innerHTML = '';
+
+  SECTIONS.forEach((section) => {
+    const items = PLACES.filter((p) => p.category === section.key);
+    const sectionEl = document.createElement('section');
+
+    const labelEl = document.createElement('div');
+    labelEl.className = 'section-label';
+    labelEl.innerHTML = `<span class="icon" style="color: #E4B84A;">${ICONS[section.icon]}</span><h2>${section.label}</h2>`;
+    sectionEl.appendChild(labelEl);
+
+    const placesEl = document.createElement('div');
+    placesEl.className = 'places';
+
+    items.forEach((place) => {
+      const idx = PLACES.findIndex((p) => p.id === place.id);
+      const rotation = ROTATIONS[idx % ROTATIONS.length];
+      const checked = checkins[place.id];
+      const tagColor = TAG_COLORS[place.tag] || '#6B7A5C';
+
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      const textEl = document.createElement('div');
+      textEl.className = 'place-text';
+      textEl.innerHTML = `
+        <div class="tag" style="color:${tagColor}; background:${tagColor}18; border:1px solid ${tagColor}33;">${place.tag}</div>
+        <div class="place-name">${place.name}</div>
+        <div class="place-area">${ICONS.mapPin}<span>${place.area}</span></div>
+        <p class="place-desc">${place.desc}</p>
+        <div class="place-task">→ ${place.task}</div>
+      `;
+
+      const btn = document.createElement('button');
+      btn.className = 'stamp-btn' + (checked ? ' checked' : '');
+      btn.setAttribute('aria-pressed', checked ? 'true' : 'false');
+      btn.setAttribute('aria-label', checked ? `Remover carimbo de ${place.name}` : `Carimbar ${place.name}`);
+
+      if (checked) {
+        btn.innerHTML = `<div class="stamp-mark" style="--rot:${rotation}deg; transform: rotate(${rotation}deg);"><span>feito ♥</span><span>${formatDate(checked.date)}</span></div>`;
+      } else {
+        btn.innerHTML = `<span class="stamp-label">carimbar</span>`;
+      }
+
+      btn.addEventListener('click', () => toggle(place.id));
+
+      card.appendChild(textEl);
+      card.appendChild(btn);
+      placesEl.appendChild(card);
+    });
+
+    sectionEl.appendChild(placesEl);
+    sectionsEl.appendChild(sectionEl);
+  });
+
+  updateProgress();
+}
+
+function toggle(id) {
+  if (checkins[id]) {
+    delete checkins[id];
+  } else {
+    checkins[id] = { date: new Date().toISOString() };
+  }
+  saveCheckins(checkins);
+  render();
+}
+
+function updateProgress() {
+  const total = PLACES.length;
+  const done = Object.keys(checkins).length;
+  const pct = Math.round((done / total) * 100);
+
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent =
+    done === 0 ? 'nenhum carimbado ainda' : `${done} de ${total} feitos`;
+
+  document.getElementById('all-done').style.display = done === total ? 'block' : 'none';
+}
+
+render();
+</script>
+
+</body>
+</html>
